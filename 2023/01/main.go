@@ -1,6 +1,10 @@
 package main
 
+import (
+	"fmt"
+)
+
 func main() {
-	// DAY 01
+    fmt.Println("Hello, World!") 
 }
 
