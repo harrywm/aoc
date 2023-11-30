@@ -1,2 +1,2 @@
-# aoc-go
-Advent of Code - Golang
+# aoc
+Advent of Code 
