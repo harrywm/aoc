@@ -60,35 +60,25 @@ func loadValues() []string {
 }
 
 func digitize(line string) string {
-    numbers := map[string]int64{
-        "one": 1,
-        "two": 2,
-        "three": 3,
-        "four": 4,
-        "five": 5,
-        "six": 6,
-        "seven": 7,
-        "eight": 8,
-        "nine": 9,
+    numbers := map[string]string{
+        "one": "1",
+        "two": "2",
+        "three": "3",
+        "four": "4",
+        "five": "5",
+        "six": "6",
+        "seven": "7",
+        "eight": "8",
+        "nine": "9",
     }
 
-    var digitized []string
-    for i := 0; i < len(line); i++ {
-        idxPlus := string(line[i:4])
-        if _, err := strconv.ParseInt(string(line[i]), 10, 64); err == nil {
-            digitized = append(digitized, string(line[i]))
-       }
-       for num, digit := range numbers { 
-           if idxPlus == num {
-               digitized = append(digitized, strconv.FormatInt(digit, 10))
-           }
-       }
-   }
-
-    // split line by match in numbers
-    returnDigitized := strings.Join(digitized, "")
+    digitized := line
+    for num, digit := range numbers {
+       replace := num[:2] + digit + num[2:]  
+       digitized = strings.ReplaceAll(digitized, num, replace) 
+    }
     // Return string
-    return returnDigitized
+    return digitized
 }
 
 func unMuddle(v string) int64 {
