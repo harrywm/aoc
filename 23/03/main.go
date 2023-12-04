@@ -8,25 +8,31 @@ import (
 )
 
 // Raw input
-var rawValues []string
+var raw []string
 
 func main(){
     fmt.Println("Day 03")
-    rawValues = loadValues()
+    raw = loadInput()
+
+    // Raw is split by NewLines
+    for _, line := range raw {
+        fmt.Println(line)
+    }
 }
 
 // Read from input.txt
-func loadValues() []string {
-    
+func loadInput() []string {
+    var in []string
+
     file, err := os.Open("input.txt")
     if err != nil {log.Fatal(err)}
     
     scanner := bufio.NewScanner(file)
-    for scanner.Scan() {rawValues = append(rawValues, scanner.Text())}
+    for scanner.Scan() {in = append(in, scanner.Text())}
     if err := scanner.Err(); err != nil {log.Fatal(err)}
 
     defer file.Close()
-    return rawValues
+    return in
 }
 
 
