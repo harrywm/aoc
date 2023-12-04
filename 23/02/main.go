@@ -13,8 +13,10 @@ import (
 // Raw input
 var rawValues []string
 
+// Answer Outputs
 var possibleIDs []int64
 var powerOfMins []int64
+
 // Map to compare Cube actuals against, the "rules"
 var cubeRules = map[string]int64{
     "Red": 12,
@@ -26,8 +28,6 @@ func main(){
     fmt.Println("Day 02")
 
     powerOfMins = iterateGames(loadValues())
-
-    fmt.Println("List of Minimum Powers: ", powerOfMins)
 
     fmt.Println("Powers: ", sumValues(powerOfMins))
     fmt.Println("Sum: ", sumValues(possibleIDs))
@@ -48,37 +48,19 @@ func loadValues() []string {
     return rawValues
 }
 
-// Iterate through each game, pulling out the Rounds and Game ID
-// Then iterate through each Round, pulling out the Rolls
-// Then iterate through each Roll, pulling out the number
-// Then compare the number against the rules
-// If the number is greater than the rule, it's not a possible game
-// If the number is less than the rule, it's a possible game
 func iterateGames(games []string) []int64 {
 
     var minPowerList []int64
     
     for idx, game := range games {
     
-        fmt.Println("")
-    
         possibleGame := true
-    
-        
-        // minRolls represents the minimum number of rolls for each colour for a game to be possible
-        // R, G, B
+        minRolls := []int64{0, 0, 0}
         
         gameWithoutID := strings.Split(game, ":")
         gameRounds := strings.Split(gameWithoutID[1], ";")
 
-
-        var minPower int64
-        minRolls := []int64{0, 0, 0}
-
-        fmt.Println("Game ID, ", idx + 1)
-
         for _, round := range gameRounds {
-
             for _, roll := range strings.Split(round, ",") {
 
                 re := regexp.MustCompile(`[-]?\d[\d,]*[\.]?[\d{2}]*`)
@@ -86,7 +68,6 @@ func iterateGames(games []string) []int64 {
                 
                 rollNum, err := strconv.ParseInt(strings.Join(i, ""), 10, 64)
                 if err != nil {log.Fatal(err)} 
-
             
                 if strings.Contains(roll, "red") {
                     if rollNum > cubeRules["Red"] {     
@@ -97,6 +78,7 @@ func iterateGames(games []string) []int64 {
                         minRolls[0] = rollNum
                     }
                 }
+                
                 if strings.Contains(roll, "green") {
                     if rollNum > cubeRules["Green"] {     
                         possibleGame = false
@@ -105,6 +87,7 @@ func iterateGames(games []string) []int64 {
                         minRolls[1] = rollNum
                     }
                 }
+                
                 if strings.Contains(roll, "blue") {
                     if rollNum > cubeRules["Blue"] {     
                         possibleGame = false
@@ -113,22 +96,10 @@ func iterateGames(games []string) []int64 {
                         minRolls[2] = rollNum
                     }
                 }
-                fmt.Println("Min Rolls", minRolls)
             }
         }
-
-
-        fmt.Println("Game ", idx + 1, "is ", possibleGame)
-        fmt.Println("And the minimum Rolls are: ", minRolls)
-        fmt.Println("And the minimum Power is: ", multiplyValues(minRolls))
-
-        minPower = multiplyValues(minRolls) 
-
-        minPowerList = append(minPowerList, minPower)
-
-        if possibleGame {
-            possibleIDs = append(possibleIDs, int64(idx + 1))
-        }
+        minPowerList = append(minPowerList, multiplyValues(minRolls))
+        if possibleGame { possibleIDs = append(possibleIDs, int64(idx + 1)) }
     }
     return minPowerList
 }

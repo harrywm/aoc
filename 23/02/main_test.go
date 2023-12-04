@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -21,11 +20,7 @@ func TestIterate(t *testing.T) {
     }
 
     out := iterateGames(testInput)
-
-    fmt.Println("out", out)
-
     for idx, v := range out {
-        fmt.Println("Gave", testInput[idx], "expected", testOutput[idx], "got", v)
         if v != testOutput[idx] {
             t.Errorf("iterateGames(%q) = %d", testInput[idx], testOutput[idx])
         }
